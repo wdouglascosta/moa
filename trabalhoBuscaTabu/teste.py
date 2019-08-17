@@ -1,68 +1,241 @@
+Skip
+to
+content
+
+Search or jump
+to…
+
+Pull
+requests
+Issues
+Marketplace
+Explore
+
+
+@wdouglascosta
+
+
+1
+1
+0
+polatbilek / Tabu - search - on - Travelling - Salesman - Problem
+Code
+Issues
+0
+Pull
+requests
+0
+Projects
+0
+Wiki
+Security
+Insights
+Tabu - search - on - Travelling - Salesman - Problem / tabu_search.py
+polatozan
+second
+commit
+d9eb7d0
+on
+12
+Jun
+2018
+192
+lines(148
+sloc)  5.24
+KB
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue May  8 15:55:33 2018
+@author: polatbilek
+"""
+import math
 from random import randint
+import time
+from random import shuffle
 
-def solucao_inicial(tam):
-	sol = [str(randint(0,1)) for i in range(tam)]
-	return ''.join(sol)
 
-def avaliacao(sol):
-	return sol.count('1')
+###  Data Format is dict:
+#           data[node_name] = gives you a list of link info
+#           data[link_index][0] = name of node that edge goes to  
+#           data[link_index][1] = weight of that edge
+def read_data(path):
+    linkset = []
+    links = {}
+    max_weight = 0
 
-def gerar_vizinhos(sol):
-	vizinhos = []
-	for i in range(len(sol)):
-		lista_bits = list(sol)
-		lista_bits[i] = '1' if sol[i] == '0' else '0'
-		vizinho = ''.join(lista_bits)
-		vizinhos.append(vizinho)
-	return vizinhos
+    with open(path, "r") as f:
+        for line in f:
+            link = []
+            tmp = line.strip().split(' ')
+            link.append(int(tmp[0]))
+            link.append(int(tmp[1]))
+            link.append(int(tmp[2]))
+            linkset.append(link)
 
-def movimento_tabu(sol, vizinho):
-	for i in range(len(sol)):
-		if sol[i] != vizinho[i]:
-			return i
+            if int(tmp[2]) > max_weight:
+                max_weight = int(tmp[2])
 
-def obter_melhor_vizinho(vizinhos, lista_tabu, melhor_sol, sol):
-	vizinhos.sort(key=avaliacao, reverse=True)
-	for vizinho in vizinhos:
-		if movimento_tabu(sol, vizinho) in lista_tabu:
-			if avaliacao(vizinho) > avaliacao(melhor_sol):
-				return vizinho
-		else:
-			return vizinho
+    for link in linkset:
+        try:
+            linklist = links[str(link[0])]
+            linklist.append(link[1:])
+            links[str(link[0])] = linklist
+        except:
+            links[str(link[0])] = [link[1:]]
 
-	# se chegar aqui é porque nenhum vizinho foi selecionado
-	print('erro: nenhum vizinho foi selecionado')
+    return links, max_weight
 
-def busca_tabu(bits=4, BTmax=2, T=1):
-	lista_tabu = []
-	Iter, melhor_iter = 0, 0
-	sol = solucao_inicial(bits)
-	melhor_sol = sol[:]
-	print('Solução inicial: ', sol)
-	print('Avaliação da solução inicial: ', avaliacao(sol))
 
-	while (Iter - melhor_iter) <= BTmax:
-		avaliacao_sol = avaliacao(sol)
-		vizinhos = gerar_vizinhos(sol)
-		melhor_vizinho = obter_melhor_vizinho(vizinhos, lista_tabu, melhor_sol, sol)
-		sol = melhor_vizinho[:]
-		pos_tabu = movimento_tabu(sol, melhor_vizinho)
+def getNeighbors(state):
+    # return hill_climbing(state)
+    return two_opt_swap(state)
 
-		if len(lista_tabu) < T:
-			lista_tabu.append(pos_tabu)
-		else:
-			lista_tabu.pop(0)
-			lista_tabu.append(pos_tabu)
 
-		if avaliacao(melhor_vizinho) > avaliacao(melhor_sol):
-			melhor_sol = melhor_vizinho[:]
-			melhor_iter += 1
+def hill_climbing(state):
+    node = randint(1, len(state) - 1)
+    neighbors = []
 
-		Iter += 1
+    for i in range(len(state)):
+        if i != node and i != 0:
+            tmp_state = state.copy()
+            tmp = tmp_state[i]
+            tmp_state[i] = tmp_state[node]
+            tmp_state[node] = tmp
+            neighbors.append(tmp_state)
 
-	return melhor_sol
+    return neighbors
 
-if __name__ == '__main__':
-	melhor_solucao = busca_tabu(bits=100, BTmax=2, T=2)
-	print('\nMelhor solução: ', melhor_solucao)
-	print('Avaliação da melhor solução: ', avaliacao(melhor_solucao))
+
+def two_opt_swap(state):
+    global neighborhood_size
+    neighbors = []
+
+    for i in range(neighborhood_size):
+        node1 = 0
+        node2 = 0
+
+        while node1 == node2:
+            node1 = randint(1, len(state) - 1)
+            node2 = randint(1, len(state) - 1)
+
+        if node1 > node2:
+            swap = node1
+            node1 = node2
+            node2 = swap
+
+        tmp = state[node1:node2]
+        tmp_state = state[:node1] + tmp[::-1] + state[node2:]
+        neighbors.append(tmp_state)
+
+    return neighbors
+
+
+def fitness(route, graph):
+    path_length = 0
+
+    for i in range(len(route)):
+        if (i + 1 != len(route)):
+            dist = weight_distance(route[i], route[i + 1], graph)
+            if dist != -1:
+                path_length = path_length + dist
+            else:
+                return max_fitness  # there is no  such path
+
+        else:
+            dist = weight_distance(route[i], route[0], graph)
+            if dist != -1:
+                path_length = path_length + dist
+            else:
+                return max_fitness  # there is no  such path
+
+    return path_length
+
+
+# not used in this code but some datasets has 2-or-more dimensional data points, in this case it is usable
+def euclidean_distance(city1, city2):
+    return math.sqrt((city1[0] - city2[0]) ** 2 + ((city1[1] - city2[1]) ** 2))
+
+
+def weight_distance(city1, city2, graph):
+    global max_fitness
+
+    neighbors = graph[str(city1)]
+
+    for neighbor in neighbors:
+        if neighbor[0] == int(city2):
+            return neighbor[1]
+
+    return -1  # there can't be minus distance, so -1 means there is not any city found in graph or there is not such edge
+
+
+def tabu_search(input_file_path):
+    global max_fitness, start_node
+    graph, max_weight = read_data(input_file_path)
+
+    ## Below, get the keys (node names) and shuffle them, and make start_node as start
+    s0 = list(graph.keys())
+    shuffle(s0)
+
+    if int(s0[0]) != start_node:
+        for i in range(len(s0)):
+            if int(s0[i]) == start_node:
+                swap = s0[0]
+                s0[0] = s0[i]
+                s0[i] = swap
+                break;
+
+    # max_fitness will act like infinite fitness
+    max_fitness = ((max_weight) * (len(s0))) + 1
+    sBest = s0
+    vBest = fitness(s0, graph)
+    bestCandidate = s0
+    tabuList = []
+    tabuList.append(s0)
+    stop = False
+    best_keep_turn = 0
+
+    start_time = time.time()
+    while not stop:
+        sNeighborhood = getNeighbors(bestCandidate)
+        bestCandidate = sNeighborhood[0]
+        for sCandidate in sNeighborhood:
+            if (sCandidate not in tabuList) and ((fitness(sCandidate, graph) < fitness(bestCandidate, graph))):
+                bestCandidate = sCandidate
+
+        if (fitness(bestCandidate, graph) < fitness(sBest, graph)):
+            sBest = bestCandidate
+            vBest = fitness(sBest, graph)
+            best_keep_turn = 0
+
+        tabuList.append(bestCandidate)
+        if (len(tabuList) > maxTabuSize):
+            tabuList.pop(0)
+
+        if best_keep_turn == stoppingTurn:
+            stop = True
+
+        best_keep_turn += 1
+
+    exec_time = time.time() - start_time
+    return sBest, vBest, exec_time
+
+
+## Tabu Search Takes edge-list in a given format:
+# nodefrom nodeto weight
+# 0 1 5
+# 3 2 4
+# 1 0 3
+# Undirectional edges should be written 2 times for both nodes.
+maxTabuSize = 10000
+neighborhood_size = 500
+stoppingTurn = 500
+max_fitness = 0
+start_node = 0
+solution, value, exec_time = tabu_search(
+    "C:\\Users\\polat\\Dropbox\\okul belgeleri\\5.2\\CENG504 Optimization Methods\\proje\\kodlar\\test.txt")
+
+print(solution)
+print(value)
+print(exec_time)
+
