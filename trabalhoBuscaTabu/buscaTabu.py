@@ -78,15 +78,6 @@ def evaluate(solution):
 
 # inverte a posição do elemento index no array, com o proximo elemento (index + 1)
 def invertTwoConsec(index, array):
-    size = len(array) - 1
-    aux = array[index]
-    array[index] = array[index + 1]
-    array[index + 1] = aux
-    array[size] = array[0]
-    return array
-
-
-def invertTwoConsec(index, array):
     #verifica se é o último elemento da lista
     if len(array) == index + 1:
         #caso seja, troca o ultimo elemento com o primeiro
@@ -105,11 +96,13 @@ def invertTwoConsec(index, array):
 # Gera a vizinhança da solução atual, invertendo a posição de duas cidades consecutivas
 def generateNeighboor(solution):
     neighborhood = []
+    # para facilitar a manipulação do array, remove o ultimo elemento (cidade de retorno)
     rawsol = solution[:-1]
 
     for i in range(len(rawsol)):
-
+        # recebe um array com os elementos na posição i invertidos
         invertedElement = invertTwoConsec(i, rawsol)
+        #concatena o array com o elemento invertido com a cidade de retorno (primeira cidade)
         invertedElement = invertedElement + invertedElement[:1]
         neighborhood.append(invertedElement)
     return neighborhood
@@ -138,14 +131,15 @@ def getBestNeigh(neighborhood, tabooList, bestSol):
 def tabooSearch(cities, BTmax, T):
     tabooList = []
     iter, bestIter = 0, 0
-    starterSol = starterSolution(cities)
+    # starterSol = starterSolution(cities)
+    starterSol = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0]
     bestSol = starterSol[:]
 
     print('the starter solution is: ', starterSol)
     print('Avaliation of starter solution: ', evaluate(starterSol))
 
     while (iter - bestIter) <= BTmax:
-        print("iteraçao numero: ",iter)
+
         neighborhood = generateNeighboor(starterSol)
 
         bestNeighbor = getBestNeigh(neighborhood, tabooList, bestSol)
@@ -171,7 +165,7 @@ def tabooSearch(cities, BTmax, T):
 
 
 if __name__ == '__main__':
-    bestSol = tabooSearch(cities, BTmax=5, T=5)
+    bestSol = tabooSearch(cities, BTmax=21, T=5)
     print('\nMelhor Solução: ', bestSol)
     print('Avaliação da melhor solução: ', evaluate(bestSol))
 

@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="43ddefc2-91e5-4bda-9e8c-195c3234a7cc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../programacaoDinamica/main/progDinamica.py" beforeDir="false" afterPath="$PROJECT_DIR$/../programacaoDinamica/main/progDinamica.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buscaTabu.py" beforeDir="false" afterPath="$PROJECT_DIR$/buscaTabu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trab.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trab.txt" afterDir="false" />
     </list>
@@ -18,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/buscaTabu.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1108">
-              <caret line="134" column="28" selection-start-line="134" selection-start-column="28" selection-end-line="134" selection-end-column="28" />
+            <state relative-caret-position="301">
+              <caret line="176" column="40" lean-forward="true" selection-end-line="179" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -227,12 +225,12 @@
       <workItem from="1562210797908" duration="123000" />
       <workItem from="1565999176940" duration="1842000" />
       <workItem from="1566263347049" duration="634000" />
-      <workItem from="1566517195370" duration="8654000" />
+      <workItem from="1566517195370" duration="12595000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52385000" />
+    <option name="totallyTimeSpent" value="56326000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="42" y="27" width="1324" height="741" extended-state="6" />
@@ -253,7 +251,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.42975205" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" visible="true" weight="0.27272728" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="12" visible="true" weight="0.19338843" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -271,12 +269,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/buscaTabu.py</url>
-          <line>114</line>
+          <line>107</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/buscaTabu.py</url>
-          <line>97</line>
+          <line>88</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
@@ -340,8 +338,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/buscaTabu.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1108">
-          <caret line="134" column="28" selection-start-line="134" selection-start-column="28" selection-end-line="134" selection-end-column="28" />
+        <state relative-caret-position="301">
+          <caret line="176" column="40" lean-forward="true" selection-end-line="179" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
