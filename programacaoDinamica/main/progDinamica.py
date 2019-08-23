@@ -1,5 +1,6 @@
 # https://pt.stackoverflow.com/questions/205528/como-criar-uma-matriz-em-python
 # https://stackoverflow.com/questions/17870612/printing-a-two-dimensional-array-in-python
+# https://www.youtube.com/watch?v=pEH5uuC4nlw
 #  pip install numpy
 import numpy as np
 

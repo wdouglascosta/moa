@@ -1,4 +1,5 @@
 from random import randint
+from math import floor
 # Matriz quadrada com 11 cidades e as distâncias entre elas
 cities = [
 #      0   1   2   3   4   5    6   7    8   9  10
@@ -84,28 +85,33 @@ def invertTwoConsec(index, array):
     array[size] = array[0]
     return array
 
+
+def invertTwoConsec(index, array):
+    #verifica se é o último elemento da lista
+    if len(array) == index + 1:
+        #caso seja, troca o ultimo elemento com o primeiro
+        aux = array[0]
+        array[0] = array[index]
+        array[index] = aux
+    else:
+        #se não for, troca o elemento na posição index com o próximo
+        aux = array[index]
+        array[index] = array[index + 1]
+        array[index + 1] = aux
+
+    return array
+
+
 # Gera a vizinhança da solução atual, invertendo a posição de duas cidades consecutivas
 def generateNeighboor(solution):
-
     neighborhood = []
+    rawsol = solution[:-1]
 
-    for i in range(20):
-        node1 = 0
-        node2 = 0
+    for i in range(len(rawsol)):
 
-        while node1 == node2:
-            node1 = randint(1, len(solution) - 1)
-            node2 = randint(1, len(solution) - 1)
-
-        if node1 > node2:
-            swap = node1
-            node1 = node2
-            node2 = swap
-
-        tmp = solution[node1:node2]
-        tmp_state = solution[:node1] + tmp[::-1] + solution[node2:]
-        neighborhood.append(tmp_state)
-
+        invertedElement = invertTwoConsec(i, rawsol)
+        invertedElement = invertedElement + invertedElement[:1]
+        neighborhood.append(invertedElement)
     return neighborhood
 
 def getBestNeigh(neighborhood, tabooList, bestSol):
@@ -120,7 +126,7 @@ def getBestNeigh(neighborhood, tabooList, bestSol):
         else:
             aux2 = evaluate(neighbor)
             #variáveis extras criadas somente para fins de debug
-            if aux2 < aux:
+            if evaluate(neighbor) < aux:
                 aux = aux2
                 toReturn = neighbor
     return toReturn
@@ -138,16 +144,15 @@ def tabooSearch(cities, BTmax, T):
     print('the starter solution is: ', starterSol)
     print('Avaliation of starter solution: ', evaluate(starterSol))
 
-
-
     while (iter - bestIter) <= BTmax:
+        print("iteraçao numero: ",iter)
         neighborhood = generateNeighboor(starterSol)
 
         bestNeighbor = getBestNeigh(neighborhood, tabooList, bestSol)
         evaluation = evaluate(bestNeighbor)
         print(bestNeighbor, evaluation)
         evaluationsList.append(evaluation)
-
+        #variavel para debug
         posTaboo = bestNeighbor
         starterSol = bestNeighbor[:]
 
@@ -166,7 +171,7 @@ def tabooSearch(cities, BTmax, T):
 
 
 if __name__ == '__main__':
-    bestSol = tabooSearch(cities, BTmax=10, T=13)
+    bestSol = tabooSearch(cities, BTmax=5, T=5)
     print('\nMelhor Solução: ', bestSol)
     print('Avaliação da melhor solução: ', evaluate(bestSol))
 
